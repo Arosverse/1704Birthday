@@ -2,142 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Birthday Surprise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday!</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(to bottom, #ffd6e0, #ffe0f7);
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('your-romantic-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #fff;
       text-align: center;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: relative;
     }
-    h1, h2 {
-      color: #ff1493;
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 20px;
+      max-width: 600px;
+      z-index: 2;
     }
-    .btn {
-      background-color: #ff69b4;
-      border: none;
-      padding: 12px 20px;
-      margin: 10px;
-      font-size: 18px;
-      border-radius: 25px;
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p.instructions {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+
+    .candles {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .candle {
+      font-size: 2em;
       cursor: pointer;
-      color: white;
-      transition: 0.3s;
+      transition: transform 0.2s ease;
     }
-    .btn:hover {
-      background-color: #ff1493;
+
+    .candle.clicked {
+      opacity: 0.3;
+      transform: scale(0.9);
+      pointer-events: none;
     }
-    .popup-emoji {
-      position: absolute;
-      font-size: 24px;
-      animation: pop 1s ease-out forwards;
-    }
-    @keyframes pop {
-      0% {opacity: 1; transform: translateY(0);}
-      100% {opacity: 0; transform: translateY(-100px);}
-    }
-    .gallery-img {
-      width: 100px;
-      margin: 5px;
-      border-radius: 10px;
-    }
-    .hidden {
+
+    .wish {
       display: none;
+      font-size: 2em;
+      animation: fadeInZoom 2s ease-in-out forwards;
+      margin-top: 20px;
     }
-    .game {
-      margin: 30px auto;
-      max-width: 400px;
+
+    @keyframes fadeInZoom {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
-    #surprise-message {
-      font-size: 24px;
-      font-weight: bold;
-      color: #d10068;
-      margin-top: 30px;
+
+    video {
+      display: none;
+      margin-top: 20px;
+      max-width: 100%;
+      border-radius: 20px;
     }
-    @media (max-width: 600px) {
-      .btn { font-size: 16px; padding: 10px 16px; }
+
+    /* Confetti hearts */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: float 5s linear infinite;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+    }
+
+    /* Emoji animation (Hearts + Balloons) */
+    .emoji {
+      position: absolute;
+      font-size: 2.5em;
+      animation: floatEmoji 10s linear infinite;
+      z-index: 0;
+      opacity: 0.8;
+    }
+
+    @keyframes floatEmoji {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-20vh) scale(1.2);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Happy Birthday My Love!</h1>
-  <h2>Welcome to your surprise!</h2>
 
-  <button class="btn" onclick="playMusic()">Play Our Song</button>
-  <button class="btn" onclick="showGallery()">Memory Gallery</button>
-  <button class="btn" onclick="showSongs()">Songs for You</button>
-  <button class="btn" onclick="startMiniGame()">Unlock the Surprise</button>
+  <!-- Background Music -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="your-romantic-music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
-  <div class="hidden" id="gallery">
-    <img class="gallery-img" src="image1.jpg" />
-    <img class="gallery-img" src="image2.jpg" />
-    <img class="gallery-img" src="image3.jpg" />
+  <!-- Floating Emoji Container -->
+  <div id="emojiContainer"></div>
+
+  <div class="container">
+    <h1>Happy Birthday, My Love!</h1>
+    <p class="instructions">Blow out all the 26 candles by clicking them:</p>
+
+    <div class="candles" id="candles">
+      <!-- 26 candles -->
+      <script>
+        for (let i = 0; i < 26; i++) {
+          document.write('<span class="candle" onclick="blowCandle(this)">&#x1F56F;&#xFE0F;</span>');
+        }
+      </script>
+    </div>
+
+    <div class="wish" id="wishText">
+      Wishing you a magical birthday full of love, laughter, and unforgettable moments!
+    </div>
+
+    <video id="bdayVideo" controls autoplay>
+      <source src="birthday-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
-
-  <div class="hidden" id="songs">
-    <iframe width="300" height="170" src="https://www.youtube.com/embed/YOUR_VIDEO_ID1" allowfullscreen></iframe>
-    <iframe width="300" height="170" src="https://www.youtube.com/embed/YOUR_VIDEO_ID2" allowfullscreen></iframe>
-  </div>
-
-  <div class="game hidden" id="game">
-    <p>Guess the number between 1 and 10:</p>
-    <input type="number" id="guessInput" min="1" max="10">
-    <button class="btn" onclick="checkGuess()">Submit</button>
-    <p id="result"></p>
-  </div>
-
-  <div id="surprise-message" class="hidden">
-    You did it! Here's your grand surprise: <br />
-    I love you more than words can say. Happy Birthday, my everything!
-  </div>
-
-  <audio id="bgMusic" src="your-music.mp3"></audio>
 
   <script>
-    function playMusic() {
-      document.getElementById('bgMusic').play();
-      spawnEmoji();
-    }
+    let blownCount = 0;
 
-    function showGallery() {
-      document.getElementById('gallery').classList.toggle('hidden');
-      spawnEmoji();
-    }
-
-    function showSongs() {
-      document.getElementById('songs').classList.toggle('hidden');
-      spawnEmoji();
-    }
-
-    function startMiniGame() {
-      document.getElementById('game').classList.remove('hidden');
-      spawnEmoji();
-    }
-
-    let correctNumber = Math.floor(Math.random() * 10) + 1;
-    function checkGuess() {
-      const guess = parseInt(document.getElementById('guessInput').value);
-      const result = document.getElementById('result');
-      if (guess === correctNumber) {
-        result.textContent = "Correct!";
-        document.getElementById('surprise-message').classList.remove('hidden');
-      } else {
-        result.textContent = "Oops! Try again.";
+    function blowCandle(elem) {
+      if (!elem.classList.contains('clicked')) {
+        elem.classList.add('clicked');
+        blownCount++;
+        if (blownCount === 26) {
+          revealWish();
+        }
       }
-      spawnEmoji();
     }
 
-    function spawnEmoji() {
-      const emoji = document.createElement('div');
-      emoji.className = 'popup-emoji';
-      emoji.style.left = Math.random() * window.innerWidth + 'px';
-      emoji.style.top = Math.random() * window.innerHeight + 'px';
-      emoji.textContent = ❤️';
-      document.body.appendChild(emoji);
-      setTimeout(() => emoji.remove(), 1000);
+    function revealWish() {
+      const wish = document.getElementById('wishText');
+      const video = document.getElementById('bdayVideo');
+      wish.style.display = 'block';
+      video.style.display = 'block';
+      video.play();
+      launchConfetti();
+      startEmojiRain();
+    }
+
+    function launchConfetti() {
+      for (let i = 0; i < 50; i++) {
+        let heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = '100vh';
+        heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+
+    function startEmojiRain() {
+      const emojiContainer = document.getElementById('emojiContainer');
+      const emojis = ['❤️', '🎈', '💖', '🎉', '💕'];
+      setInterval(() => {
+        let emoji = document.createElement('div');
+        emoji.classList.add('emoji');
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        emojiContainer.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 10000);
+      }, 300);
     }
   </script>
+
 </body>
 </html>
