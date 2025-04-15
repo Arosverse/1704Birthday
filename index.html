@@ -11,27 +11,22 @@
       font-family: 'Segoe UI', sans-serif;
       background: url('your-romantic-bg.jpg') no-repeat center center fixed;
       background-size: cover;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
       color: #fff;
       text-align: center;
-      overflow: hidden;
-      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
 
     .container {
       background-color: rgba(0, 0, 0, 0.5);
-      padding: 20px;
+      padding: 30px;
       border-radius: 20px;
-      max-width: 600px;
-      z-index: 2;
+      margin: 50px auto;
+      max-width: 700px;
     }
 
     h1 {
-      font-size: 2.5em;
+      font-size: 2.8em;
       margin-bottom: 10px;
     }
 
@@ -41,17 +36,17 @@
     }
 
     .candles {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      justify-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
     }
 
     .candle {
-      font-size: 2em;
+      font-size: 2.2em;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s ease, opacity 0.3s ease;
     }
 
     .candle.clicked {
@@ -62,9 +57,9 @@
 
     .wish {
       display: none;
-      font-size: 2em;
+      font-size: 1.8em;
       animation: fadeInZoom 2s ease-in-out forwards;
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     video {
@@ -72,9 +67,11 @@
       margin-top: 20px;
       max-width: 100%;
       border-radius: 20px;
+      border: 6px dashed pink;
+      background: rgba(255, 192, 203, 0.3);
+      padding: 10px;
     }
 
-    /* Album Styles */
     .album {
       display: none;
       margin-top: 30px;
@@ -102,7 +99,6 @@
       transform: scale(1.05);
     }
 
-    /* Confetti hearts */
     .heart {
       position: absolute;
       width: 20px;
@@ -124,14 +120,44 @@
       border-radius: 50%;
     }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
+
+    .emoji {
+      position: absolute;
+      font-size: 2.5em;
+      animation: floatEmoji 10s linear infinite;
+      z-index: 0;
+      opacity: 0.8;
     }
 
-    .heart::after {
-      left: -10px;
-      top: 0;
+    .tap-heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: pink;
+      transform: rotate(45deg);
+      opacity: 0.9;
+      animation: popHeart 1s ease forwards;
+      pointer-events: none;
+    }
+
+    .tap-heart::before,
+    .tap-heart::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: pink;
+      border-radius: 50%;
+    }
+
+    .tap-heart::before { top: -15px; left: 0; }
+    .tap-heart::after { left: -15px; top: 0; }
+
+    @keyframes popHeart {
+      0% { transform: scale(1) rotate(45deg); opacity: 1; }
+      100% { transform: scale(2) rotate(45deg); opacity: 0; }
     }
 
     @keyframes fadeInZoom {
@@ -144,32 +170,17 @@
       100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
     }
 
-    /* Emoji animation */
-    .emoji {
-      position: absolute;
-      font-size: 2.5em;
-      animation: floatEmoji 10s linear infinite;
-      z-index: 0;
-      opacity: 0.8;
-    }
-
     @keyframes floatEmoji {
-      0% {
-        transform: translateY(100vh) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-20vh) scale(1.2);
-        opacity: 0;
-      }
+      0% { transform: translateY(100vh) scale(1); opacity: 1; }
+      100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-  <audio id="bgMusic" autoplay loop>
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
     <source src="your-romantic-music.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
 
   <div id="emojiContainer"></div>
@@ -208,8 +219,14 @@
 
   <script>
     let blownCount = 0;
+    let musicStarted = false;
 
     function blowCandle(elem) {
+      if (!musicStarted) {
+        document.getElementById('bgMusic').play();
+        musicStarted = true;
+      }
+
       if (!elem.classList.contains('clicked')) {
         elem.classList.add('clicked');
         blownCount++;
@@ -220,10 +237,10 @@
     }
 
     function revealWish() {
-      const wish = document.getElementById('wishText');
+      document.body.style.backgroundImage = "url('your-new-bg.jpg')";
+      document.getElementById('wishText').style.display = 'block';
       const video = document.getElementById('bdayVideo');
       const album = document.getElementById('memoryAlbum');
-      wish.style.display = 'block';
       video.style.display = 'block';
       album.style.display = 'block';
       video.play();
@@ -256,6 +273,15 @@
         setTimeout(() => emoji.remove(), 10000);
       }, 300);
     }
+
+    document.body.addEventListener('click', function(e) {
+      const heart = document.createElement('div');
+      heart.classList.add('tap-heart');
+      heart.style.left = `${e.clientX - 15}px`;
+      heart.style.top = `${e.clientY - 15}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
+    });
   </script>
 
 </body>
