@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -69,22 +70,33 @@
 <body>
   <div class="heart-container" id="heart">
     <!-- Candle positions filled by JavaScript -->
-  </div>  <div class="message" id="message">
+  </div>
+
+  <div class="message" id="message">
     <h1>Happy 26th Birthday!</h1>
     <p>Wishing you a day filled with love, joy, and beautiful memories!</p>
-  </div>  <div class="balloons" id="balloons"></div>
-  <div class="hearts" id="hearts"></div>  <div class="video-frame" style="display: none;" id="videoFrame">
+  </div>
+
+  <div class="balloons" id="balloons"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="video-frame" style="display: none;" id="videoFrame">
     <video id="birthdayVideo" width="100%" controls autoplay>
       <source src="your-video.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-  </div>  <div class="response-zone">
+  </div>
+
+  <div class="response-zone">
     <h2>Send Your Wishes!</h2>
     <input type="text" placeholder="Your Name" />
     <textarea rows="4" placeholder="Your Message..."></textarea>
     <br/>
     <button style="padding: 10px 20px; background-color: #ff69b4; color: white; border: none; border-radius: 10px;">Submit</button>
-  </div>  <!-- Memory Album Slider Section -->  <div style="background: linear-gradient(to right, #ffd1dc, #ffe4e1); padding: 40px 20px; margin-top: 50px; border-top: 3px solid #ff6f91;">
+  </div>
+
+  <!-- Memory Album Slider Section -->
+  <div style="background: linear-gradient(to right, #ffd1dc, #ffe4e1); padding: 40px 20px; margin-top: 50px; border-top: 3px solid #ff6f91;">
     <h2 style="text-align: center; font-family: 'Comic Sans MS', cursive; color: #d6336c; font-size: 2em; margin-bottom: 20px;">Our Sweetest Memories</h2>
     <div class="slider" style="margin: 0 auto; max-width: 500px; position: relative; overflow: hidden; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
       <div id="slides" style="display: flex; transition: transform 0.5s ease-in-out;">
@@ -97,7 +109,9 @@
       <button onclick="prevSlide()" style="margin-right: 10px; padding: 5px 10px; background-color: #ff6f91; color: white; border: none; border-radius: 10px; cursor: pointer;">Prev</button>
       <button onclick="nextSlide()" style="padding: 5px 10px; background-color: #ff6f91; color: white; border: none; border-radius: 10px; cursor: pointer;">Next</button>
     </div>
-  </div>  <script>
+  </div>
+
+  <script>
     const heart = document.getElementById('heart');
     const positions = [
       [150, 50], [135, 70], [120, 90], [105, 110], [90, 130], [75, 150],
@@ -158,5 +172,6 @@
       currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
       updateSlide();
     }
-  </script></body>
+  </script>
+</body>
 </html>
