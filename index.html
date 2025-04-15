@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: url('romantic-background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+    }
+    .heart-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 50px auto;
+    }
+    .candle {
+      position: absolute;
+      width: 20px;
+      height: 40px;
+      background: url('26.png') no-repeat center/contain;
+      cursor: pointer;
+    }
+    .message {
+      display: none;
+      text-align: center;
+      color: #ff69b4;
+      font-size: 2rem;
+      animation: pop 1s ease-in-out forwards;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .balloons, .hearts {
+      position: fixed;
+      width: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .video-frame {
+      border: 10px solid #ffb6c1;
+      border-radius: 20px;
+      padding: 10px;
+      margin: 30px auto;
+      width: 80%;
+      max-width: 600px;
+      background-color: #fff0f5;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    .response-zone {
+      padding: 20px;
+      background: #fffaf0;
+      text-align: center;
+    }
+    .response-zone input, .response-zone textarea {
+      width: 80%;
+      max-width: 400px;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="heart-container" id="heart">
+    <!-- Candle positions filled by JavaScript -->
+  </div>
+
+  <div class="message" id="message">
+    <h1>Happy 26th Birthday!</h1>
+    <p>Wishing you a day filled with love, joy, and beautiful memories!</p>
+  </div>
+
+  <div class="balloons" id="balloons"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <div class="video-frame" style="display: none;" id="videoFrame">
+    <video id="birthdayVideo" width="100%" controls autoplay>
+      <source src="your-video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="response-zone">
+    <h2>Send Your Wishes!</h2>
+    <input type="text" placeholder="Your Name" />
+    <textarea rows="4" placeholder="Your Message..."></textarea>
+    <br/>
+    <button style="padding: 10px 20px; background-color: #ff69b4; color: white; border: none; border-radius: 10px;">Submit</button>
+  </div>
+
+  <!-- Memory Album Slider Section -->
+  <div style="background: linear-gradient(to right, #ffd1dc, #ffe4e1); padding: 40px 20px; margin-top: 50px; border-top: 3px solid #ff6f91;">
+    <h2 style="text-align: center; font-family: 'Comic Sans MS', cursive; color: #d6336c; font-size: 2em; margin-bottom: 20px;">Our Sweetest Memories</h2>
+    <div class="slider" style="margin: 0 auto; max-width: 500px; position: relative; overflow: hidden; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+      <div id="slides" style="display: flex; transition: transform 0.5s ease-in-out;">
+        <img src="memory1.jpg" alt="Memory 1" style="width: 100%; flex-shrink: 0; border-radius: 20px;" />
+        <img src="memory2.jpg" alt="Memory 2" style="width: 100%; flex-shrink: 0; border-radius: 20px;" />
+        <img src="memory3.jpg" alt="Memory 3" style="width: 100%; flex-shrink: 0; border-radius: 20px;" />
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 10px;">
+      <button onclick="prevSlide()" style="margin-right: 10px; padding: 5px 10px; background-color: #ff6f91; color: white; border: none; border-radius: 10px; cursor: pointer;">Prev</button>
+      <button onclick="nextSlide()" style="padding: 5px 10px; background-color: #ff6f91; color: white; border: none; border-radius: 10px; cursor: pointer;">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const heart = document.getElementById('heart');
+    const positions = [
+      [150, 50], [135, 70], [120, 90], [105, 110], [90, 130], [75, 150],
+      [90, 170], [105, 190], [120, 210], [135, 230], [150, 250],
+      [165, 230], [180, 210], [195, 190], [210, 170], [225, 150],
+      [210, 130], [195, 110], [180, 90], [165, 70],
+      [150, 140], [135, 160], [165, 160], [150, 180], [150, 200], [150, 220]
+    ];
+
+    let blown = 0;
+    positions.forEach((pos, i) => {
+      const c = document.createElement('div');
+      c.className = 'candle';
+      c.style.left = pos[0] + 'px';
+      c.style.top = pos[1] + 'px';
+      c.addEventListener('click', () => {
+        if (!c.classList.contains('blown')) {
+          c.classList.add('blown');
+          c.style.opacity = '0.3';
+          new Audio('candle-blow.mp3').play();
+          blown++;
+          if (blown === 26) {
+            document.getElementById('message').style.display = 'block';
+            document.getElementById('videoFrame').style.display = 'block';
+            document.getElementById('birthdayVideo').play();
+          }
+        }
+      });
+      heart.appendChild(c);
+    });
+
+    document.body.addEventListener('click', (e) => {
+      const heartIcon = document.createElement('div');
+      heartIcon.textContent = '❤️';
+      heartIcon.style.position = 'absolute';
+      heartIcon.style.left = e.pageX + 'px';
+      heartIcon.style.top = e.pageY + 'px';
+      heartIcon.style.fontSize = '24px';
+      heartIcon.style.pointerEvents = 'none';
+      document.body.appendChild(heartIcon);
+      setTimeout(() => heartIcon.remove(), 1000);
+    });
+
+    let currentSlide = 0;
+    const slides = document.getElementById('slides');
+    const totalSlides = slides.children.length;
+
+    function updateSlide() {
+      slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      updateSlide();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      updateSlide();
+    }
+  </script>
+</body>
+</html>
