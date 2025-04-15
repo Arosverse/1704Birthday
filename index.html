@@ -73,10 +73,33 @@
 
     .wish {
       display: none;
-      font-size: 1.8em;
-      animation: fadeInZoom 2s ease-in-out forwards;
-      margin-top: 30px;
+      font-size: 2em;
       font-family: 'Sacramento', cursive;
+      margin-top: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(255,192,203,0.2), rgba(255,255,255,0.1));
+      border: 2px dashed #ff9ecf;
+      border-radius: 20px;
+      color: #fff;
+      text-shadow: 1px 1px 3px hotpink;
+      animation: fadeInZoom 2s ease-in-out forwards;
+      position: relative;
+    }
+
+    .wish::before {
+      content: "❣️";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      font-size: 2em;
+    }
+
+    .wish::after {
+      content: "❣️";
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      font-size: 2em;
     }
 
     video {
@@ -84,17 +107,19 @@
       margin-top: 20px;
       max-width: 100%;
       border-radius: 20px;
-      border: 6px dashed pink;
-      background: rgba(255, 192, 203, 0.3);
+      border: 8px double hotpink;
+      background: radial-gradient(circle at center, #ffe0ec, #ffc0cb);
+      box-shadow: 0 4px 20px rgba(255, 192, 203, 0.5);
       padding: 10px;
     }
 
     .slideshow {
       display: none;
       margin-top: 40px;
-      border-radius: 15px;
-      padding: 20px;
-      background: rgba(255, 182, 193, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      background: linear-gradient(to right, rgba(255,192,203,0.4), rgba(255,255,255,0.1));
+      box-shadow: 0 4px 30px rgba(255, 182, 193, 0.3);
       animation: fadeInZoom 2s ease-in-out forwards;
     }
 
@@ -194,9 +219,7 @@
     <h1>Happy Birthday, My Love!</h1>
     <p class="instructions">Blow out all the 26 candles by clicking them:</p>
 
-    <div class="heart-container" id="candles">
-      <!-- Candle positions forming a heart shape -->
-    </div>
+    <div class="heart-container" id="candles"></div>
 
     <div class="wish" id="wishText">
       Wishing you a magical birthday full of love, laughter, and unforgettable moments!
