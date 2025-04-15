@@ -4,11 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday!</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Sacramento&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: url('your-romantic-bg.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
@@ -17,42 +21,54 @@
       min-height: 100vh;
     }
 
+    h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
     .container {
       background-color: rgba(0, 0, 0, 0.5);
       padding: 30px;
       border-radius: 20px;
       margin: 50px auto;
-      max-width: 700px;
+      max-width: 800px;
     }
 
-    h1 {
-      font-size: 2.8em;
-      margin-bottom: 10px;
-    }
-
-    p.instructions {
+    .instructions {
       font-size: 1.2em;
       margin-bottom: 20px;
     }
 
-    .candles {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      justify-items: center;
-      gap: 15px;
-      margin-bottom: 30px;
+    .heart-container {
+      position: relative;
+      width: 300px;
+      height: 270px;
+      margin: 0 auto 40px;
     }
 
     .candle {
-      font-size: 2.2em;
+      font-size: 1.8em;
+      position: absolute;
+      color: #ffd6d6;
       cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.3s ease;
+      animation: glow 1.5s infinite alternate;
     }
 
     .candle.clicked {
       opacity: 0.3;
       transform: scale(0.9);
       pointer-events: none;
+      animation: none;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px pink, 0 0 15px pink;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px hotpink, 0 0 30px hotpink;
+      }
     }
 
     .wish {
@@ -60,6 +76,7 @@
       font-size: 1.8em;
       animation: fadeInZoom 2s ease-in-out forwards;
       margin-top: 30px;
+      font-family: 'Sacramento', cursive;
     }
 
     video {
@@ -72,31 +89,25 @@
       padding: 10px;
     }
 
-    .album {
+    .slideshow {
       display: none;
-      margin-top: 30px;
+      margin-top: 40px;
+      border-radius: 15px;
+      padding: 20px;
+      background: rgba(255, 182, 193, 0.2);
       animation: fadeInZoom 2s ease-in-out forwards;
     }
 
-    .album h2 {
-      font-size: 2em;
-      margin-bottom: 15px;
-    }
-
-    .memory-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-    }
-
-    .memory-grid img {
+    .slideshow img {
       width: 100%;
-      border-radius: 10px;
-      transition: transform 0.3s ease;
+      border-radius: 15px;
+      max-height: 400px;
+      object-fit: cover;
     }
 
-    .memory-grid img:hover {
-      transform: scale(1.05);
+    @keyframes fadeInZoom {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .heart {
@@ -155,16 +166,6 @@
     .tap-heart::before { top: -15px; left: 0; }
     .tap-heart::after { left: -15px; top: 0; }
 
-    @keyframes popHeart {
-      0% { transform: scale(1) rotate(45deg); opacity: 1; }
-      100% { transform: scale(2) rotate(45deg); opacity: 0; }
-    }
-
-    @keyframes fadeInZoom {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
     @keyframes float {
       0% { transform: translateY(0) rotate(45deg); opacity: 1; }
       100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
@@ -174,11 +175,15 @@
       0% { transform: translateY(100vh) scale(1); opacity: 1; }
       100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
     }
+
+    @keyframes popHeart {
+      0% { transform: scale(1) rotate(45deg); opacity: 1; }
+      100% { transform: scale(2) rotate(45deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Background Music -->
   <audio id="bgMusic" loop>
     <source src="your-romantic-music.mp3" type="audio/mpeg">
   </audio>
@@ -189,12 +194,8 @@
     <h1>Happy Birthday, My Love!</h1>
     <p class="instructions">Blow out all the 26 candles by clicking them:</p>
 
-    <div class="candles" id="candles">
-      <script>
-        for (let i = 0; i < 26; i++) {
-          document.write('<span class="candle" onclick="blowCandle(this)">&#x1F56F;&#xFE0F;</span>');
-        }
-      </script>
+    <div class="heart-container" id="candles">
+      <!-- Candle positions forming a heart shape -->
     </div>
 
     <div class="wish" id="wishText">
@@ -206,18 +207,39 @@
       Your browser does not support the video tag.
     </video>
 
-    <div class="album" id="memoryAlbum">
-      <h2>Our Beautiful Memories</h2>
-      <div class="memory-grid">
-        <img src="photo1.jpg" alt="Memory 1" />
-        <img src="photo2.jpg" alt="Memory 2" />
-        <img src="photo3.jpg" alt="Memory 3" />
-        <img src="photo4.jpg" alt="Memory 4" />
-      </div>
+    <div class="slideshow" id="memoryAlbum">
+      <img id="slideImg" src="photo1.jpg" alt="Memory 1">
     </div>
   </div>
 
   <script>
+    const heartContainer = document.getElementById('candles');
+    const positions = [
+      [150, 20],[120,40],[180,40],
+      [100,70],[200,70],
+      [90,100],[210,100],
+      [80,130],[220,130],
+      [80,160],[220,160],
+      [100,190],[200,190],
+      [120,210],[180,210],
+      [150,230],
+      [130,120],[170,120],
+      [110,150],[190,150],
+      [125,90],[175,90],
+      [140,60],[160,60],
+      [150,100],[150,150]
+    ];
+
+    for (let i = 0; i < 26; i++) {
+      let span = document.createElement('span');
+      span.className = 'candle';
+      span.innerHTML = '&#x1F56F;&#xFE0F;';
+      span.onclick = () => blowCandle(span);
+      span.style.left = positions[i][0] + 'px';
+      span.style.top = positions[i][1] + 'px';
+      heartContainer.appendChild(span);
+    }
+
     let blownCount = 0;
     let musicStarted = false;
 
@@ -246,6 +268,7 @@
       video.play();
       launchConfetti();
       startEmojiRain();
+      startSlideshow();
     }
 
     function launchConfetti() {
@@ -282,6 +305,16 @@
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 1000);
     });
+
+    // Slideshow Logic
+    const images = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg'];
+    let index = 0;
+    function startSlideshow() {
+      setInterval(() => {
+        index = (index + 1) % images.length;
+        document.getElementById('slideImg').src = images[index];
+      }, 3000);
+    }
   </script>
 
 </body>
