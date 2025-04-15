@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(to bottom, #ffd6e0, #ffe0f7);
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h1, h2 {
+      color: #ff1493;
+    }
+    .btn {
+      background-color: #ff69b4;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background-color: #ff1493;
+    }
+    .popup-emoji {
+      position: absolute;
+      font-size: 24px;
+      animation: pop 1s ease-out forwards;
+    }
+    @keyframes pop {
+      0% {opacity: 1; transform: translateY(0);}
+      100% {opacity: 0; transform: translateY(-100px);}
+    }
+    .gallery-img {
+      width: 100px;
+      margin: 5px;
+      border-radius: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    .game {
+      margin: 30px auto;
+      max-width: 400px;
+    }
+    #surprise-message {
+      font-size: 24px;
+      font-weight: bold;
+      color: #d10068;
+      margin-top: 30px;
+    }
+    @media (max-width: 600px) {
+      .btn { font-size: 16px; padding: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Happy Birthday My Love!</h1>
+  <h2>Welcome to your surprise!</h2>
+
+  <button class="btn" onclick="playMusic()">Play Our Song</button>
+  <button class="btn" onclick="showGallery()">Memory Gallery</button>
+  <button class="btn" onclick="showSongs()">Songs for You</button>
+  <button class="btn" onclick="startMiniGame()">Unlock the Surprise</button>
+
+  <div class="hidden" id="gallery">
+    <img class="gallery-img" src="image1.jpg" />
+    <img class="gallery-img" src="image2.jpg" />
+    <img class="gallery-img" src="image3.jpg" />
+  </div>
+
+  <div class="hidden" id="songs">
+    <iframe width="300" height="170" src="https://www.youtube.com/embed/YOUR_VIDEO_ID1" allowfullscreen></iframe>
+    <iframe width="300" height="170" src="https://www.youtube.com/embed/YOUR_VIDEO_ID2" allowfullscreen></iframe>
+  </div>
+
+  <div class="game hidden" id="game">
+    <p>Guess the number between 1 and 10:</p>
+    <input type="number" id="guessInput" min="1" max="10">
+    <button class="btn" onclick="checkGuess()">Submit</button>
+    <p id="result"></p>
+  </div>
+
+  <div id="surprise-message" class="hidden">
+    You did it! Here's your grand surprise: <br />
+    I love you more than words can say. Happy Birthday, my everything!
+  </div>
+
+  <audio id="bgMusic" src="your-music.mp3"></audio>
+
+  <script>
+    function playMusic() {
+      document.getElementById('bgMusic').play();
+      spawnEmoji();
+    }
+
+    function showGallery() {
+      document.getElementById('gallery').classList.toggle('hidden');
+      spawnEmoji();
+    }
+
+    function showSongs() {
+      document.getElementById('songs').classList.toggle('hidden');
+      spawnEmoji();
+    }
+
+    function startMiniGame() {
+      document.getElementById('game').classList.remove('hidden');
+      spawnEmoji();
+    }
+
+    let correctNumber = Math.floor(Math.random() * 10) + 1;
+    function checkGuess() {
+      const guess = parseInt(document.getElementById('guessInput').value);
+      const result = document.getElementById('result');
+      if (guess === correctNumber) {
+        result.textContent = "Correct!";
+        document.getElementById('surprise-message').classList.remove('hidden');
+      } else {
+        result.textContent = "Oops! Try again.";
+      }
+      spawnEmoji();
+    }
+
+    function spawnEmoji() {
+      const emoji = document.createElement('div');
+      emoji.className = 'popup-emoji';
+      emoji.style.left = Math.random() * window.innerWidth + 'px';
+      emoji.style.top = Math.random() * window.innerHeight + 'px';
+      emoji.textContent = ❤️';
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 1000);
+    }
+  </script>
+</body>
+</html>
