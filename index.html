@@ -319,6 +319,22 @@
       document.getElementById('surpriseBox').style.display = 'block';
       document.getElementById('wishForm').style.display = 'block';
       document.getElementById('bdayVideo').play();
+      const bgMusic = document.getElementById('bgMusic');
+let currentVol = bgMusic.volume; // starting volume
+const targetVol = 0.2;
+const fadeSteps = 20;
+const interval = 100; // ms
+
+let step = (currentVol - targetVol) / fadeSteps;
+let fadeInterval = setInterval(() => {
+  currentVol -= step;
+  if (currentVol <= targetVol) {
+    bgMusic.volume = targetVol;
+    clearInterval(fadeInterval);
+  } else {
+    bgMusic.volume = currentVol;
+  }
+}, interval);
       startEmojiRain();
       startSlideshow();
     }
