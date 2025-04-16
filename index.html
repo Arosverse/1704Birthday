@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy Birthday!</title>
+  <title>Hi Swati!</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Sacramento&display=swap" rel="stylesheet">
@@ -90,7 +90,7 @@
     }
 
     .wish::before, .wish::after {
-      content: "❣️";
+      content: "💕";
       position: absolute;
       font-size: 2em;
     }
@@ -126,7 +126,6 @@
       object-fit: cover;
     }
 
-    /* Surprise Box */
     .surprise-box {
       display: none;
       margin-top: 40px;
@@ -145,24 +144,20 @@
       75% { transform: rotate(5deg); }
     }
 
-    /* Floating fireflies */
-    .firefly {
+    .emoji {
       position: absolute;
-      width: 4px;
-      height: 4px;
-      background: yellow;
-      border-radius: 50%;
-      opacity: 0.6;
-      animation: twinkle 8s infinite ease-in-out;
+      font-size: 2.2em;
+      animation: floatEmoji 10s linear infinite;
+      opacity: 0.7;
       z-index: 0;
+      pointer-events: none;
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.1; transform: scale(0.5); }
-      50% { opacity: 1; transform: scale(1.5); }
+    @keyframes floatEmoji {
+      0% { transform: translateY(100vh) scale(1); opacity: 1; }
+      100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
     }
 
-    /* Tap Heart */
     .tap-heart {
       position: absolute;
       width: 30px;
@@ -187,18 +182,37 @@
     .tap-heart::before { top: -15px; left: 0; }
     .tap-heart::after { left: -15px; top: 0; }
 
-    @keyframes fadeInZoom {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
     @keyframes popHeart {
       0% { transform: scale(1) rotate(45deg); opacity: 1; }
       100% { transform: scale(2) rotate(45deg); opacity: 0; }
     }
 
-    .response-btn {
-      margin-top: 30px;
+    @keyframes fadeInZoom {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Wish Response Form */
+    #wishForm {
+      display: none;
+      margin-top: 40px;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      animation: fadeInZoom 2s ease-in-out forwards;
+    }
+
+    #wishForm input, #wishForm textarea {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-family: 'Poppins';
+    }
+
+    #wishForm button {
       padding: 10px 20px;
       background: hotpink;
       color: white;
@@ -206,10 +220,9 @@
       border-radius: 10px;
       font-size: 1em;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
-    .response-btn:hover {
+    #wishForm button:hover {
       background: deeppink;
     }
   </style>
@@ -223,18 +236,17 @@
   <div id="emojiContainer"></div>
 
   <div class="container">
-    <h1> Oyee Jaaanu!🥰</h1>
+    <h1>Oyeeee Jaaanuu! 🥰</h1>
     <p class="instructions">Blow out all the 26 candles by clicking them:</p>
 
     <div class="heart-container" id="candles"></div>
 
     <div class="wish" id="wishText">
-      Heey... Timtimi!🐳 Wishing you a magical birthday full of love, laughter, and unforgettable moments! Keep shining My Girl ❤️! Quack Loves You 🌸💝😘!
+      Heey... Timtimi!🐳 Wishing you a magical birthday full of love, laughter, and unforgettable moments! Keep shining My Girl ❤️🫰! Quack Loves You 🌸💝😘!
     </div>
 
     <video id="bdayVideo" controls autoplay>
       <source src="birthday-video.mp4" type="video/mp4">
-      Your browser does not support the video tag.
     </video>
 
     <div class="slideshow" id="memoryAlbum">
@@ -242,23 +254,16 @@
     </div>
 
     <div class="surprise-box" id="surpriseBox">
-      <img src="gift-box.png" alt="Surprise Box" onclick="alert('https://youtu.be/XsX3ATc3FbA?si=2BSsz2RbykPkUsHY 💝😚! I love you ❤️!')">
+      <img src="gift-box.png" alt="Surprise Box" onclick="window.open('https://youtu.be/XsX3ATc3FbA?si=2BSsz2RbykPkUsHY', '_blank')">
     </div>
 
-    <button class="response-btn" onclick="sendResponse()">Send Your Wish</button>
+    <form id="wishForm" action="https://formsubmit.co/krishna42asb@gmail.com" method="POST">
+      <h3 style="color: hotpink; font-family: 'Sacramento'; font-size: 2em;">Send Your Wish</h3>
+      <input type="text" name="name" placeholder="Your Name" required />
+      <textarea name="message" rows="4" placeholder="Write wish for cutieepiee 🌸" required></textarea>
+      <button type="submit">Send Wish</button>
+    </form>
   </div>
-
-  <!-- Fireflies -->
-  <script>
-    for (let i = 0; i < 30; i++) {
-      const firefly = document.createElement('div');
-      firefly.classList.add('firefly');
-      firefly.style.top = Math.random() * 100 + 'vh';
-      firefly.style.left = Math.random() * 100 + 'vw';
-      firefly.style.animationDuration = (Math.random() * 5 + 5) + 's';
-      document.body.appendChild(firefly);
-    }
-  </script>
 
   <script>
     const heartContainer = document.getElementById('candles');
@@ -312,18 +317,25 @@
       document.getElementById('bdayVideo').style.display = 'block';
       document.getElementById('memoryAlbum').style.display = 'block';
       document.getElementById('surpriseBox').style.display = 'block';
+      document.getElementById('wishForm').style.display = 'block';
       document.getElementById('bdayVideo').play();
+      startEmojiRain();
       startSlideshow();
     }
 
-    // Slideshow logic
-    const images = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg', 'photo6.jpg'];
-    let index = 0;
-    function startSlideshow() {
+    const emojiContainer = document.getElementById('emojiContainer');
+    const emojis = ['❤️', '🎈', '💖', '🎉', '💕', '🌟'];
+    function startEmojiRain() {
       setInterval(() => {
-        index = (index + 1) % images.length;
-        document.getElementById('slideImg').src = images[index];
-      }, 3000);
+        let emoji = document.createElement('div');
+        emoji.classList.add('emoji');
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        emoji.style.top = '100vh';
+        emojiContainer.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 10000);
+      }, 300);
     }
 
     document.body.addEventListener('click', function(e) {
@@ -335,12 +347,13 @@
       setTimeout(() => heart.remove(), 1000);
     });
 
-    function sendResponse() {
-      const email = "swatikundu612@gmail.com"; // Replace with your Gmail ID
-      const subject = encodeURIComponent("Sending you a magical birthday wish!");
-      const body = encodeURIComponent("Hey! Just saw your birthday surprise page and had to say how beautiful and emotional it was. Happy Birthday!");
-
-      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, '_blank');
+    const images = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg', 'photo6.jpg', 'photo7.jpg'];
+    let index = 0;
+    function startSlideshow() {
+      setInterval(() => {
+        index = (index + 1) % images.length;
+        document.getElementById('slideImg').src = images[index];
+      }, 3000);
     }
   </script>
 
