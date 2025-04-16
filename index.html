@@ -354,7 +354,9 @@
       document.getElementById('memoryAlbum').style.display = 'block';
       document.getElementById('surpriseBox').style.display = 'block';
       document.getElementById('wishForm').style.display = 'block';
-      document.getElementById('bdayVideo').play();
+      const video = document.getElementById('bdayVideo');
+video.volume = 1.0; // Set volume to max
+video.play();
       
       startVideoEmojiFlow();
       startEmojiRain();
