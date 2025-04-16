@@ -297,20 +297,31 @@
     let musicStarted = false;
 
     function blowCandle(elem) {
-      if (!musicStarted) {
-        document.getElementById('bgMusic').play();
-        musicStarted = true;
-      }
+  const bgMusic = document.getElementById('bgMusic');
 
-      if (!elem.classList.contains('clicked')) {
-        elem.classList.add('clicked');
-        blownCount++;
-        if (blownCount === 26) {
-          revealWish();
-        }
-      }
+  if (!musicStarted) {
+    bgMusic.play();
+    bgMusic.volume = 1.0;
+    musicStarted = true;
+  }
+
+  if (!elem.classList.contains('clicked')) {
+    elem.classList.add('clicked');
+    blownCount++;
+
+    // Gradually lower the volume as candles are blown (up to 20)
+    if (blownCount <= 20) {
+      const maxCandles = 20;
+      const minVolume = 0.2;
+      const newVolume = 1 - ((blownCount / maxCandles) * (1 - minVolume));
+      bgMusic.volume = Math.max(minVolume, newVolume);
     }
 
+    if (blownCount === 26) {
+      revealWish();
+    }
+  }
+}
     function revealWish() {
       document.body.style.backgroundImage = "url('your-new-bg.jpg')";
       document.getElementById('wishText').style.display = 'block';
@@ -319,22 +330,7 @@
       document.getElementById('surpriseBox').style.display = 'block';
       document.getElementById('wishForm').style.display = 'block';
       document.getElementById('bdayVideo').play();
-      const bgMusic = document.getElementById('bgMusic');
-let currentVol = bgMusic.volume; // starting volume
-const targetVol = 0.1;
-const fadeSteps = 20;
-const interval = 100; // ms
-
-let step = (currentVol - targetVol) / fadeSteps;
-let fadeInterval = setInterval(() => {
-  currentVol -= step;
-  if (currentVol <= targetVol) {
-    bgMusic.volume = targetVol;
-    clearInterval(fadeInterval);
-  } else {
-    bgMusic.volume = currentVol;
-  }
-}, interval);
+      
       startEmojiRain();
       startSlideshow();
     }
